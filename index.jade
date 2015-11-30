@@ -15,7 +15,8 @@ html(lang="en")
     include library.jade
     // custom files
     link(rel="stylesheet",type="text/css",href="index.css")
-    script(type="text/javascript",src="p5.min.js")
+    //-script(type="text/javascript",src="p5.min.js")
+    script(type="text/javascript",src="pixi.min.js")
     script(type="text/javascript",src="index.js")
   body
     #root
@@ -23,5 +24,6 @@ html(lang="en")
         .col-sm-4
           input#money.form-control(type="text",value="5000")
           .btn.btn-default(onclick="change()") Update
-          span &nbsp; try 0, 1000, 10000 and 100000
+          span &nbsp; try -10000, 0, 1000, 10000 and 100000
       br
+      #container
