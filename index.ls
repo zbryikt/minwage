@@ -37,13 +37,14 @@ brick-class.prototype = do
   opacity: 1
   iteration: 0
   idx: 0
+  pos: -> do
+    x: ( @idx % 100 ) * (@w + @m) + 10
+    y: parseInt( @idx / 100 ) * (@h + @m) + 100
+    
   reset: (idx) ->
     if idx? => @idx = idx
-    @ <<< do
-      x: ( @idx % 100 ) * (@w + @m) + 10
-      y: parseInt( @idx / 100 ) * (@h + @m) + 100
-      opacity:  1
-      iteration: 0
+    @ <<< opacity: 1, iteration: 0
+    @ <<< @pos!
 
 setup = ->
   create-canvas 800,600
@@ -63,8 +64,17 @@ draw = ->
       step brick
     rect brick.x, brick.y, 3, 2
 
-setTimeout (->
-  for i from 500 til 1000 =>
+change-range = (money) ->
+  for i from 0 til parseInt(money / 100) =>
     b = bricks[i]
-    transition b, {delay: parseInt(1000*Math.random!), dur: 2000, ease: easer.ease-in-out}, {x: 400, y: 600}
-), 1000
+    {x,y} = b.pos!
+    transition b, {delay: parseInt(1000*Math.random!), dur: 2000, ease: easer.ease-in-out}, {y}
+  for i from parseInt(money / 100) til 1000 =>
+    b = bricks[i]
+    transition b, {delay: parseInt(1000*Math.random!), dur: 2000, ease: easer.ease-in-out}, {y: 600}
+
+setTimeout (->
+  change-range 5000
+), 100
+
+change = -> change-range document.getElementById(\money).value
