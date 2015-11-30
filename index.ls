@@ -38,15 +38,15 @@ brick-class = (idx, isPos = true) ->
 config = do
   w: 0
   h: 0
-  c: 1000
+  c: 10000
   dur: 2000
   step: 10
 
 brick-class.prototype = bcp = do
   mod: 100
-  w: 4
+  w: 2
   h: 2
-  m: 2
+  m: 1
   c: r: 200, g: 90, b: 90
   opacity: 1
   iteration: 0
@@ -73,65 +73,49 @@ setup = ->
   graphics.beginFill 0xFFFF00
   base.stage = stage = new PIXI.Container!
   stage.addChild graphics
+  batch = new PIXI.ParticleContainer!
+  stage.addChild batch
   size = {x: 5, y: 4}
   offset = {x: 10, y: 10}
   for i from 0 til config.c
     obj = new brick-class i, false
+    sprite = new PIXI.Sprite.fromImage \dot-neg.png
+    obj.sprite = sprite
+    batch.addChild sprite
     bricks.neg.push obj
     obj = new brick-class i, true
+    sprite = new PIXI.Sprite.fromImage \dot-pos.png
+    obj.sprite = sprite
+    batch.addChild sprite
     bricks.pos.push obj
   change-range $(\#money).0.value, true
   renderer.render stage
-
-/*
-window.setup = ->
-  container = $(\#container)
-  [w,h] = [config.w, config.h] = [container.width!, container.height!]
-  cvs = create-canvas w, h, \webgl
-  bcp.mod = parseInt(w / ( bcp.w + bcp.m))
-  document.body.removeChild cvs.elt
-  container.append cvs.elt
-  size = {x: 5, y: 4}
-  offset = {x: 10, y: 10}
-  for i from 0 til config.c
-    obj = new brick-class i, false
-    bricks.neg.push obj
-    obj = new brick-class i, true
-    bricks.pos.push obj
-  change-range $(\#money).0.value, true
-*/
 
 draw = ->
   requestAnimationFrame draw
   base.graphics.beginFill 0xFFFFFF
   base.graphics.drawRect 0, 0, config.w, config.h
+
+  for brick in bricks.neg
+    if brick.transition => step brick
+    brick.sprite <<< brick{x,y}
+  #base.graphics.beginFill 0x55CC5500
+  for brick in bricks.pos
+    if brick.transition => step brick
+    brick.sprite <<< brick{x,y}
+  /*
+  base.graphics.beginFill 0xFFFFFF
+  base.graphics.drawRect 0, 0, config.w, config.h
   base.graphics.beginFill 0xCC555500
   for brick in bricks.neg
-    #fill "rgba(200,80,80,#{brick.opacity})"
     if brick.transition => step brick
     base.graphics.drawRect brick.x, brick.y, 3, 2
   base.graphics.beginFill 0x55CC5500
   for brick in bricks.pos
-    #fill "rgba(80,200,80,#{brick.opacity})"
     if brick.transition => step brick
     base.graphics.drawRect brick.x, brick.y, 3, 2
+  */
   base.renderer.render base.stage
-
-/*
-window.draw = ->
-  fill \#fff
-  rect -1,-1,802,602
-  for brick in bricks.neg
-    stroke "rgba(200,80,80,#{brick.opacity})"
-    fill "rgba(200,80,80,#{brick.opacity})"
-    if brick.transition => step brick
-    rect brick.x, brick.y, 3, 2
-  for brick in bricks.pos
-    stroke "rgba(80,200,80,#{brick.opacity})"
-    fill "rgba(80,200,80,#{brick.opacity})"
-    if brick.transition => step brick
-    rect brick.x, brick.y, 3, 2
-*/
 
 change-range-side = (money, list, isPos = true, instant = false) ->
   count = parseInt(money / config.step)
@@ -152,7 +136,7 @@ change-range-side = (money, list, isPos = true, instant = false) ->
     transition(
       b,
       {delay: (if instant => 0 else parseInt(1000*Math.random!)), dur, ease: easer.ease-in-out},
-      {y: (if isPos => 0 else config.h), opacity: 0}
+      {y: (if isPos => -5 else config.h), opacity: 0}
     )
 
 change-range = (money, instant = false) ->
