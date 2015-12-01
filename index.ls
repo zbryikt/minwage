@@ -1,3 +1,32 @@
+
+angular.module \main, <[]>
+  ..controller \main, <[$scope $timeout]> ++ ($scope, $timeout) ->
+    $scope.income = 50000
+    $scope.spend = do
+      housing: 10000
+      basic: 4000
+      transport: 10000
+      medical: 2000
+      debt: 0
+      tax: 2000
+      food: 20000
+      other: 0
+    $scope.update = ->
+      if $scope.handler => $timeout.cancel $scope.handler
+      $scope.handler = $timeout (->
+        $scope.handler = null
+        $scope.sum = [parseInt(v) for k,v of $scope.spend].reduce(((a,b) -> a + b),0)
+        $(\#money).0.value = $scope.income - $scope.sum
+        console.log $(\#money).0.value
+        window.change!
+      ), 1000
+    $scope.$watch 'spend', $scope.update, true
+    $scope.$watch 'income', $scope.update, true
+
+window.change = -> 
+  if !window.change-range? => return
+  window.change-range document.getElementById(\money).value, false
+
 <- $ document .ready
 
 base = {}
@@ -62,6 +91,7 @@ brick-class.prototype = bcp = do
     if idx? => @idx = idx
     @ <<< alpha: 1, iteration: 0
     @ <<< @pos isPos
+    @y = if isPos => -5 else config.h
 
 setup = ->
   container = $(\#container)
@@ -92,8 +122,7 @@ setup = ->
     obj.sprite = sprite2
     batch2.addChild sprite2
     bricks.pos.push obj
-  change-range $(\#money).0.value, true
-  renderer.render stage
+  window.change!
 
 draw = (has-next = false) ->
   base.graphics.beginFill 0xFFFFFF
@@ -134,12 +163,10 @@ change-range-side = (money, list, isPos = true, instant = false) ->
       {y: (if isPos => -5 else config.h), alpha: 1}
     )
 
-change-range = (money, instant = false) ->
+window.change-range = change-range = (money, instant = false) ->
   change-range-side money, bricks.neg, false, instant
   change-range-side money, bricks.pos, true, instant
   draw true
 
-window.change = -> change-range document.getElementById(\money).value
 
 setup!
-draw!

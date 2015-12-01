@@ -19,9 +19,103 @@ html(lang="en")
     script(type="text/javascript",src="pixi.min.js")
     script(type="text/javascript",src="index.js")
   body
-    #root
+    #root(ng-app="main",ng-controller="main")
       .row
-        .col-sm-4
+        .col-sm-6
+          h2 歡迎來到基本工資的世界！
+
+          .section
+            h3 我的基本工資...
+            .row
+              .col-sm-6
+                span 我好窮
+              .col-sm-6
+                .input-group
+                  input#income.form-control(disabledtype="text",ng-model="income",placeholder="1000")
+                  span.input-group-addon 元 ( 每月 )
+          hr
+
+          .section
+            h3 居住
+            .row
+              .col-sm-6
+                span 買房租房瓦愣房
+              .col-sm-6
+                .input-group
+                  input#spend-housing.form-control(type="text",ng-model="spend.housing",placeholder="1000")
+                  span.input-group-addon 元 ( 每月 )
+
+          .section
+            h3 基本開銷
+            .row
+              .col-sm-6
+                span 水電瓦斯網路電視 blah 
+              .col-sm-6
+                .input-group
+                  input#spend-basic.form-control(type="text",ng-model="spend.basic",placeholder="1000")
+                  span.input-group-addon 元 ( 每月 )
+
+          .section
+            h3 通勤費用
+            .row
+              .col-sm-6
+                span 花在交通上的、油、維修、車票、車險
+              .col-sm-6
+                .input-group
+                  input#spend-transport.form-control(type="text",ng-model="spend.transport",placeholder="1000")
+                  span.input-group-addon 元 ( 每月 )
+
+          .section
+            h3 醫療費用
+            .row
+              .col-sm-6
+                span 健康、看病、保險
+              .col-sm-6
+                .input-group
+                  input#spend-medical.form-control(type="text",ng-model="spend.medical",placeholder="1000")
+                  span.input-group-addon 元 ( 每月 )
+
+          .section
+            h3 債務
+            .row
+              .col-sm-6
+                span 學生貸款、信用卡費等等
+              .col-sm-6
+                .input-group
+                  input#spend-debt.form-control(type="text",ng-model="spend.debt",placeholder="1000")
+                  span.input-group-addon 元 ( 每月 )
+
+          .section
+            h3 食物
+            .row
+              .col-sm-6
+                span 要吃飽
+              .col-sm-6
+                .input-group
+                  input#spend-food.form-control(type="text",ng-model="spend.food",placeholder="1000")
+                  span.input-group-addon 元 ( 每月 )
+
+          .section
+            h3 稅
+            .row
+              .col-sm-6
+                span 中華民國萬萬稅
+              .col-sm-6
+                .input-group
+                  input#spend-tax.form-control(type="text",ng-model="spend.tax",placeholder="1000")
+                  span.input-group-addon 元 ( 每月 )
+
+          .section
+            h3 其它
+            .row
+              .col-sm-6
+                span 就其它
+              .col-sm-6
+                .input-group
+                  input#spend-other.form-control(type="text",ng-model="spend.other",placeholder="1000")
+                  span.input-group-addon 元 ( 每月 )
+
+          hr
           input#money.form-control(type="text",value="5000")
           .btn.btn-default(onclick="change()") Update
           span &nbsp; try -10000, 0, 1000, 10000 and 100000
